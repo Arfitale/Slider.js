@@ -5,11 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Slider</title>
+    <link rel="stylesheet" href="./assets/remixicon/remixicon.css">
     <link rel="stylesheet" href="./slider.css">
     <script src="./slider.js" defer></script>
 </head>
 <body>
     <div class="slider-ctr slider-desktop">
+        <div class="slider-controls">
+            <button class="btn btn-lg left"><i class="ri-arrow-left-circle-line"></i></button>
+            <button class="btn btn-lg right"><i class="ri-arrow-right-circle-line"></i></button>
+        </div>
         <div class="main-slider">
             <div class="slider-gallery" data-index="0">
                 <img src="./scene_01.png" width="820" height="410" alt="HK Dream">
@@ -23,6 +28,7 @@
             <div class="slider-gallery" data-index="3">
                 <img src="./scene_04.png" width="820" height="410" alt="HK Godmaster">
             </div>
+        </div>
     </div>
 </body>
 </html>

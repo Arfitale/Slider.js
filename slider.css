@@ -1,3 +1,15 @@
+/*************************************** VARIABLE ***************************************/
+:root {
+    --btn-sm: 1rem;
+    --btn-md: 2rem;
+    --btn-lg: 3rem;
+
+    --edge-near: 2%;
+}
+
+
+/*************************************** GLOBAL ***************************************/
+
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +24,30 @@ body {
     background-color: #1a1616;
 }
 
-/* SLIDER */
+/*************************************** CLASSES ***************************************/
+
+.btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+    opacity: .8;
+}
+.btn:hover {
+    opacity: 1;
+}
+
+.btn-sm {
+    font-size: var(--btn-sm);
+}
+.btn-md {
+    font-size: var(--btn-md);
+}
+.btn-lg {
+    font-size: var(--btn-lg);
+}
+
+/*************************************** SLIDER ***************************************/
 
 .slider-ctr {
     position: relative;
@@ -27,6 +62,35 @@ body {
     transition: .5s ease;
 }
 
+/* CONTROLS */
+.slider-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.slider-controls .btn {
+    position: absolute;
+    z-index: 5;
+}
+
+.btn * {
+    pointer-events: none;
+}
+
+.slider-controls .left {
+    left: var(--edge-near);
+}
+
+.slider-controls .right {
+    right: var(--edge-near);
+}
+
+/* GALLERY */
 .slider-gallery {
     position: absolute;
     width: 820px;
@@ -38,6 +102,8 @@ body {
     height: 100%;
 }
 
+
+/* SLIDER DIMENSION*/
 .slider-desktop {
     width: 820px;
     height: 410px;

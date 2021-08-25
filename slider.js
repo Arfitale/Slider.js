@@ -1,3 +1,4 @@
+// VAR
 const slider = document.querySelector(".slider-ctr");
 const sliderGallery = slider.querySelectorAll('.slider-gallery');
 const mainSlider = slider.querySelector(".main-slider");
@@ -30,13 +31,12 @@ const transitionType = "smooth";
 let counter = 0;
 
 // Checking current count
-function checkCount(counter, max) {
-    if (counter >= max - 1) {
+function checkCount(counter, max, state = 1) {
+    state ? counter++ : counter--;
+    if (counter >= max) {
         counter = 0;
     } else if (counter < 0) {
         counter = max - 1;
-    } else {
-        counter++;
     }
     return counter
 }
@@ -45,7 +45,7 @@ function checkCount(counter, max) {
 function slideShow() {
     let movePos = counter * width;
     mainSlider.style.transform = `translateX(-${movePos}px)`;
-    counter = checkCount(counter, length);
+    counter = checkCount(counter, length, 1);
 }
-setInterval(slideShow, time);
 
+setInterval(slideShow, time);
