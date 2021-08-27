@@ -1,51 +1,83 @@
-// VAR
-const slider = document.querySelector(".slider-ctr");
-const sliderGallery = slider.querySelectorAll('.slider-gallery');
-const mainSlider = slider.querySelector(".main-slider");
+(function() {
+    class Slider {
+        constructor(width, height, refClass, interval = 3000) {
+            this.width = width;
+            this.height = height;
+            this.refClass = refClass;
+            this.interval = interval;
+        }
 
-const length = sliderGallery.length;
-const box = slider.getBoundingClientRect();
-const width = box.width;
-const height = box.height;
+        getSliderCtr() {
+            return document.querySelectorAll(`.${this.refClass}`);
+        }
 
-// determine dimension of main slider
-const totalWidth = Number(length) * Number(width);
-mainSlider.style.width = `${totalWidth}px`;
-mainSlider.style.height = `${height}px`;
+        repositionGallery(sliderGallery) {
+            sliderGallery.forEach(gallery => {
+                const index = Number(gallery.getAttribute("data-index"));
 
-// reposition each gallery to each pos
-sliderGallery.forEach(gallery => {
-    const index = Number(gallery.getAttribute("data-index"));
+                // determine dimension of slider gallery
+                gallery.style.width = `${this.width}px`;
+                gallery.style.height = `${this.height}px`;
 
-    // Set position
-    const posX = index * width;
-    gallery.style.left = `${posX}px`;
-});
+                // Set position
+                const posX = index * this.width;
+                gallery.style.left = `${posX}px`;
+            });
+        }
 
-// Animate slider
+        checkCount(counter, max) {
+            if (counter >= max - 1) {
+                counter = 0;
+            } else if (counter < 0) {
+                counter = max - 1;
+            } else {
+                counter++;
+            }
+            return counter
+        }
 
-const time = 3000; // in milisecond
-const transitionType = "smooth";
+        slideMove(counter, mainSlider) {
+            let movePos = counter * this.width;
+            mainSlider.style.transform = `translateX(-${movePos}px)`;
+        }
 
-// Slideshow
-let counter = 0;
+        slideShow(len, mainSlider) {
+            let counter = 0;
+            setInterval(() => {
+                this.slideMove(counter, mainSlider);
+                counter = this.checkCount(counter, len);
+            }, this.interval);
+        }
 
-// Checking current count
-function checkCount(counter, max, state = 1) {
-    state ? counter++ : counter--;
-    if (counter >= max) {
-        counter = 0;
-    } else if (counter < 0) {
-        counter = max - 1;
+        slider() {
+            let containers = this.getSliderCtr();
+            
+            containers.forEach(ctr => {
+                const mainSlider = ctr.querySelector(".main-slider");
+                const sliderGallery = ctr.querySelectorAll(".slider-gallery");
+            
+                const len = sliderGallery.length;
+                
+                // determine dimension of main container
+                ctr.style.width = `${this.width}px`;
+                ctr.style.height = `${this.height}px`;
+
+                
+                // determine dimension of main slider
+                const totalWidth = Number(len) * Number(this.width);
+                mainSlider.style.width = `${totalWidth}px`;
+                mainSlider.style.height = `${this.height}px`;
+
+                // reposition each gallery to each pos
+                this.repositionGallery(sliderGallery);
+
+                // Animate Slider
+                this.slideShow(len, mainSlider);
+            });
+        }
     }
-    return counter
-}
 
-// Move slideshow
-function slideShow() {
-    let movePos = counter * width;
-    mainSlider.style.transform = `translateX(-${movePos}px)`;
-    counter = checkCount(counter, length, 1);
-}
+    const desktopSlider = new Slider(820, 410, "slider-desktop", 3000).slider();
+    const sliderMobile = new Slider(420, 210, "slider-mobile", 1000).slider();
 
-setInterval(slideShow, time);
+}());
