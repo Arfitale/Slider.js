@@ -11,6 +11,26 @@
             return document.querySelectorAll(`.${this.refClass}`);
         }
 
+        getCurrentIndex(mainSlider) {
+            return Number(mainSlider.getAttribute("data-current"));
+        }
+
+        checkIndex(index, max, state) {
+            let addition = index + 1;
+            let subtract = index - 1;
+
+            if (state) {
+                return addition === max ? 0 : addition;
+            } else {
+                return subtract < 0 ? max - 1 : subtract;
+            }
+        }
+
+        setCurrentIndex(mainSlider, replace) {
+            mainSlider.setAttribute("data-current", `${replace}`);
+        }
+
+
         repositionGallery(sliderGallery) {
             sliderGallery.forEach(gallery => {
                 const index = Number(gallery.getAttribute("data-index"));
@@ -25,27 +45,25 @@
             });
         }
 
-        checkCount(counter, max) {
-            if (counter >= max - 1) {
-                counter = 0;
-            } else if (counter < 0) {
-                counter = max - 1;
-            } else {
-                counter++;
-            }
-            return counter
+        initializeDataSlider(mainSlider) {
+            mainSlider.setAttribute("data-current", "0");
         }
 
-        slideMove(counter, mainSlider) {
-            let movePos = counter * this.width;
+        slideMove(mainSlider, len) {
+            const index = this.getCurrentIndex(mainSlider)
+            const newIndex = this.checkIndex(index, len, 1);
+            let movePos = index * this.width;
+
+            // perform position of currrent gallery
             mainSlider.style.transform = `translateX(-${movePos}px)`;
+
+            // set new current index
+            this.setCurrentIndex(mainSlider, newIndex);
         }
 
-        slideShow(len, mainSlider) {
-            let counter = 0;
+        animateSlider(mainSlider, len) {
             setInterval(() => {
-                this.slideMove(counter, mainSlider);
-                counter = this.checkCount(counter, len);
+                this.slideMove(mainSlider, len);
             }, this.interval);
         }
 
@@ -71,13 +89,18 @@
                 // reposition each gallery to each pos
                 this.repositionGallery(sliderGallery);
 
-                // Animate Slider
-                this.slideShow(len, mainSlider);
+                // initialize current index of slider
+                this.initializeDataSlider(mainSlider);
+
+                // animate slider
+                this.slideMove(mainSlider, len)
+                this.animateSlider(mainSlider, len);
+
             });
         }
     }
 
-    const desktopSlider = new Slider(820, 410, "slider-desktop", 3000).slider();
-    const sliderMobile = new Slider(420, 210, "slider-mobile", 1000).slider();
+    const desktopSlider = new Slider(820, 410, "slider-desktop", 8000).slider();
+    const sliderMobile = new Slider(420, 210, "slider-mobile", 5000).slider();
 
 }());
