@@ -5,6 +5,7 @@
             this.height = height;
             this.refClass = refClass;
             this.interval = interval;
+
         }
 
         getSliderCtr() {
@@ -14,18 +15,6 @@
         getCurrentIndex(mainSlider) {
             return Number(mainSlider.getAttribute("data-current"));
         }
-
-        checkIndex(index, max, state) {
-            let addition = index + 1;
-            let subtract = index - 1;
-
-            if (state) {
-                return addition === max ? 0 : addition;
-            } else {
-                return subtract < 0 ? max - 1 : subtract;
-            }
-        }
-
         setCurrentIndex(mainSlider, replace) {
             mainSlider.setAttribute("data-current", `${replace}`);
         }
@@ -49,14 +38,24 @@
             mainSlider.setAttribute("data-current", "0");
         }
 
-        slideMove(mainSlider, len) {
+        slideMove(mainSlider, len, isRight = true) {
             const index = this.getCurrentIndex(mainSlider)
-            const newIndex = this.checkIndex(index, len, 1);
-            let movePos = index * this.width;
 
+            // Get new index by slide move direction
+            const checkAutoSlideIndex = (index, len, isRight) => {
+                if (isRight) {
+                    const addition = ++index;
+                    return addition >= len ? 0 : addition;
+                }
+                const subtract = --index;
+                return index < 0 ? len - 1 : subtract;
+            }
+            let newIndex = checkAutoSlideIndex(index, len, isRight);
+            let movePos = this.width * newIndex;
+            
             // perform position of currrent gallery
             mainSlider.style.transform = `translateX(-${movePos}px)`;
-
+            
             // set new current index
             this.setCurrentIndex(mainSlider, newIndex);
         }
@@ -73,7 +72,9 @@
             containers.forEach(ctr => {
                 const mainSlider = ctr.querySelector(".main-slider");
                 const sliderGallery = ctr.querySelectorAll(".slider-gallery");
-            
+                const leftControl = ctr.querySelector(".left-slide-control");
+                const rightControl = ctr.querySelector(".right-slide-control");
+
                 const len = sliderGallery.length;
                 
                 // determine dimension of main container
@@ -92,15 +93,24 @@
                 // initialize current index of slider
                 this.initializeDataSlider(mainSlider);
 
+                // set slider control event
+                leftControl.addEventListener("click", e => {
+                    this.slideMove(mainSlider, len, false);
+                });
+                rightControl.addEventListener("click", e => {
+                    this.slideMove(mainSlider, len);
+                });
+
                 // animate slider
-                this.slideMove(mainSlider, len)
-                this.animateSlider(mainSlider, len);
+                setTimeout(() => {
+                    this.slideMove(mainSlider, len);
+                    this.animateSlider(mainSlider, len);
+                }, this.interval);
 
             });
         }
     }
 
-    const desktopSlider = new Slider(820, 410, "slider-desktop", 8000).slider();
-    const sliderMobile = new Slider(420, 210, "slider-mobile", 5000).slider();
+    const sliderDesktop = new Slider(820, 410, "slider-desktop", 8000).slider();
 
 }());
