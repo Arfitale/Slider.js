@@ -14,7 +14,7 @@
 
         getCurrentIndex(mainSlider) {
             return Number(mainSlider.getAttribute("data-current"));
-        }
+        } 
         setCurrentIndex(mainSlider, replace) {
             mainSlider.setAttribute("data-current", `${replace}`);
         }
