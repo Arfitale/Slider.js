@@ -170,7 +170,19 @@ a:hover {
 }
 
 .thumbs {
-    display: none;
+    display: flex;
+    gap: .5rem;
+}
+
+.thumbs-gallery.active {
+    border: 1px solid rgb(77, 123, 252);
+}
+
+.thumbs-gallery img {
+    width: 66px;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
 }
 
 
