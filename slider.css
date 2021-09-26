@@ -174,8 +174,18 @@ a:hover {
     gap: .5rem;
 }
 
+.thumbs-gallery {
+    opacity: .8;
+    cursor: pointer;
+}
+
+.thumbs-gallery:hover {
+    opacity: 1;
+}
+
 .thumbs-gallery.active {
     border: 1px solid rgb(77, 123, 252);
+    opacity: 1;
 }
 
 .thumbs-gallery img {
